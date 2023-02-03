@@ -1,0 +1,200 @@
+<div class="fondoC">
+
+    
+    <div class='main'>
+      <div class='formContainer'>
+        <div class='formColumn'>
+          <div *ngIf="!loadingImage ; else loading">
+          <div *ngIf="urlImage.length && !loadingImage" class="image">
+            <img
+              src={{urlImage}}
+              class='inputImage'
+              alt='new image'
+            />
+          </div>
+          <div *ngIf="!urlImage.length && !loadingImage" class="image">
+            <img
+              src='../../../assets/images/addpokemon.png'
+              class='defaultImage'
+              alt='default image'
+            />
+            
+          </div>
+          
+          </div>
+          <ng-template #loading>
+            <div class="row loading">
+              <mat-spinner></mat-spinner>
+            </div>
+        </ng-template>
+
+            <input class="form-control" type="file" 
+            (change)="onChange($event)">
+            
+            <button (click)="saveImage()" 
+            class="btnCreate"
+            [disabled]='fileCorrect'
+            >
+            Cargar Imagen
+            </button>
+          
+         
+          </div>
+        
+        <form class='form' [formGroup]="miFormValidado" (submit)="envairFormulario()">
+          <h1 class='formTitle' style="margin:auto ;">Create a new pokemon</h1>
+         
+          <div class='example-form'>
+            <mat-form-field class="full-width">
+              <mat-label >Nombre</mat-label>
+              <input type="text" matInput formControlName="name" [errorStateMatcher]="matcher"
+                     placeholder="Nombre">
+              <mat-hint>* obligatorio</mat-hint>
+              <mat-error *ngIf="!name?.hasError('required')">
+                Por favor ingrese un nombre válido mayor a 3 caracteres y que no contenga números
+              </mat-error>
+              <mat-error *ngIf="name?.hasError('required')">
+                El nombre es <strong>Obligatorio</strong>
+              </mat-error>
+            </mat-form-field>
+          
+          </div>
+        
+          <div class=" input" style="padding-left: 55px;">
+            <div class='col example-form'>
+              <mat-form-field class="row middle-width ">
+                <mat-label>Altura</mat-label>
+                <input type="text" matInput formControlName="height" [errorStateMatcher]="matcher"
+                       placeholder="Altura">
+                <mat-hint>* obligatorio</mat-hint>
+                <mat-error *ngIf="!height?.hasError('required')">
+                  Por favor ingrese un valor válido entre 1 y 1000 y que no contenga letras
+                </mat-error>
+                 <mat-error *ngIf="height?.hasError('required')">
+                Este campo es <strong>Obligatorio</strong>
+                </mat-error> 
+              </mat-form-field>
+              </div>
+              <div class='col example-form'>
+                <mat-form-field class="row middle-width ">
+                  <mat-label>Peso</mat-label>
+                  <input type="text" matInput formControlName="weight" [errorStateMatcher]="matcher"
+                         placeholder="Peso">
+                  <mat-hint>* obligatorio</mat-hint>
+                  <mat-error *ngIf="!weight?.hasError('required')">
+                    Por favor ingrese un valor válido entre 1 y 1000 y que no contenga letras
+                  </mat-error>
+                   <mat-error *ngIf="weight?.hasError('required')">
+                   Este campo es <strong>Obligatorio</strong>
+                  </mat-error> 
+                </mat-form-field>
+                </div>
+          </div>
+          <div class="description">
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Descripción</mat-label>
+              <textarea matInput formControlName="species" [errorStateMatcher]="matcher"></textarea>
+              <mat-hint>* obligatorio</mat-hint>
+              <mat-error *ngIf="!species?.hasError('required')">
+                Por favor ingrese una descripción mayor a 30 caracteres
+              </mat-error>
+               <mat-error *ngIf="species?.hasError('required')">
+               Este campo es <strong>Obligatorio</strong>
+              </mat-error> 
+            </mat-form-field>
+          </div>
+          
+         
+          <div class="input" >
+            <mat-label style="margin:auto ; font-size: 20px; text-decoration:underline solid  #166ebb;">Stats</mat-label>
+            <div formArrayName ="stats" >
+             <div *ngFor="let stat of  stats.controls; let i = index" [formGroupName]="i">
+             
+            <div class='col example-form' style="margin-left:45px">
+              <mat-form-field class="row middle-width altura">
+                <mat-label>{{stat.value.stat}}</mat-label>
+                <input type="text" matInput formControlName="baseStat" [errorStateMatcher]="matcher"
+                       placeholder={{stat.value.stat}}>
+                <mat-hint>* obligatorio</mat-hint>
+                <mat-error *ngIf="!stats.controls[i].hasError('required')">
+                  Por favor ingrese un valor válido entre 1 y 255 y que no contenga letras
+                </mat-error>
+                 <mat-error *ngIf="stats.controls[i].hasError('required')">
+                Este campo es <strong>Obligatorio</strong>
+                </mat-error> 
+              </mat-form-field>
+              </div>
+            </div>
+              </div>
+          </div>
+          <div class='input'>
+            <div class='example-form'>
+              <div formArrayName="abilities" >
+                <mat-label style="margin:auto ; font-size: 20px;  text-decoration:underline solid  #166ebb;">Habilidades</mat-label>
+                <!-- Iteramos por cada telefono en la lista -->
+                <div *ngFor="let ability of  abilities.controls; let i = index" [formGroupName]="i" >
+                  <mat-form-field class="full-width">
+                  <input type="text" matInput placeholder="Nombre" formControlName="name" [errorStateMatcher]="matcher" >
+                  <mat-hint>* obligatorio</mat-hint>
+                  <mat-error *ngIf="!abilities.controls[i].hasError('required')">
+                    Este campo es <strong>Obligatorio</strong>
+                  </mat-error>
+                </mat-form-field>
+                    <div >
+                    <h4 class="habilities">Habilidad  {{i + 1}}</h4>
+                    <p class="habilities"><b>{{ability.value.name}}</b></p>
+                      <div *ngIf="ability.value.name.length">
+                    <button class="habilities btnDelete" mat-button color="warn"
+                    (click)="deleteAbility(i)">Borrar</button>
+                     </div>
+                   </div>
+                </div>
+                
+                <button class="btnCreate" (click)="addAbility($event)">Añadir habilidad</button>
+              </div>
+            </div>
+            
+          </div>
+           <div class="input" >
+            <div class="example-form" >
+              <h3 style="margin:auto ; font-size: 20px; margin-bottom: 25px; text-decoration:underline solid  #166ebb;">Seleccione el tipo de pokemon</h3>
+              <mat-form-field appearance="fill" style="margin-left:40px">
+                <mat-label >Tipos</mat-label>
+                <mat-select   (selectionChange)="handleChange($event)">
+                  <!-- <mat-select-trigger >
+                    {{types.value?.[0] || ''}}
+                    <span *ngIf="(types.value?.length || 0) > 1" class="example-additional-selection">
+                      (+{{(types.value?.length || 0) - 1}} {{types.value?.length === 2 ? 'other' : 'others'}})
+                    </span>
+                  </mat-select-trigger> -->
+                  <mat-option *ngFor="let type of listTypes" [value]="type.type">{{type.type}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+          </div>
+          <div class="input"style="margin-left: 25px">
+          <div *ngFor="let type of types; let i = index" >
+             <div class='types'>
+              <p><b>{{type}}</b></p>
+              <button class="types" mat-button color="warn"
+                    (click)="deleteType(i)">X</button>
+              </div>
+           </div>
+        </div>
+            <button
+             
+              class="btnError"
+              
+            >
+              <p>Create</p>
+            </button>
+          
+           
+         
+        </form>
+      </div>
+    </div>
+  
+</div>

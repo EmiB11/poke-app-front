@@ -1,0 +1,66 @@
+<div class="fondo">
+<div class="container ">
+    <div class="row header">
+        <img  class="title col-sm-12 col-md-12 col-lg-3 col-xl-3" src="../../../assets/images/logo.png" alt="logotipo" />
+        <mat-form-field class="search col-sm-12 col-md-12 col-lg-8 col-xl-8" floatLabel="always">
+            <mat-label>Pokemon name</mat-label>
+            <input matInput [formControl]="search" (keydown.enter)="onSearchPokemon()" placeholder="Pikachu">
+        </mat-form-field>
+        
+        <section class="col-12">
+            <mat-slide-toggle
+            color="primary"
+            [checked]="classicMode"
+            (change)="classicMode = !classicMode">
+            {{classicMode ? 'Gif' : 'Classic'}}
+            </mat-slide-toggle>
+        </section>
+        <mat-form-field appearance="fill" style="margin-left:100px ; width:150px">
+            <mat-label >Tipos</mat-label>
+            <mat-select   (selectionChange)="filterByTypes($event)" >
+             <mat-option value="ALL">Todos</mat-option>
+            <mat-option *ngFor="let type of listTypes" [value]="type.type">{{type.type}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field appearance="fill" >
+            <mat-label >Orden Alfabético</mat-label>
+            <mat-select   (selectionChange)="orderAlfab($event)" >
+            <mat-option value="NOT_ORDER">Sin Orden</mat-option>
+             <mat-option value="ASC">De A-Z</mat-option>
+            <mat-option  value="DES">De Z-A</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <img class="bg__pokeball" src="../../../assets/images/Pokemon08.png" alt="pokeball">
+    <button class="create" (click)="createPokemon()">Crear Pokemon</button>
+    <div class="row justify-content-center" *ngIf="isLoading">
+        <div class="col-4">
+            <span>Loading.... please wait!!</span>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            <img src="../../../assets/images/loading.gif" alt="loading"/>
+            
+        </div>
+    </div>
+   
+    <div *ngIf="!isSearching">
+    <mat-paginator #paginator
+               class="demo-paginator"
+               (page)="handlePage($event)"
+               [length]="lengthList"
+               [pageSize]="5"
+               [showFirstLastButtons]="true"
+               [hidePageSize]="true"
+               [pageIndex]="0"
+               
+               aria-label="Select page">
+</mat-paginator>
+  </div>
+  <div *ngIf="disabledPagin;else allPokemon" style="margin-top:50px">
+    <app-list-pokemon  [isLoading]="isLoading"  [listPokemons]="listPokemons" [classicMode]="classicMode" [searchPokemons]="searchPokemons" [isSearching]="isSearching"></app-list-pokemon>
+ </div>
+ <ng-template #allPokemon>
+    <app-list-pokemon  [isLoading]="isLoading"  [listPokemons]="listPokemons" [classicMode]="classicMode" [searchPokemons]="searchPokemons" [isSearching]="isSearching"></app-list-pokemon>
+ </ng-template>
+</div>
+
+</div>

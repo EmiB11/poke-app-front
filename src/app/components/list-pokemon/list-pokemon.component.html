@@ -1,0 +1,48 @@
+
+<div *ngIf="!isSearching"  (scroll)="onScroll($event)" >
+<div *ngIf="!isLoading" class="row pokemon__list" >
+      <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4" *ngFor="let pokemon of listPokemons" >
+          <div class="card {{'bg-'}}{{pokemon | nombreType}}" routerLink='/detail/{{pokemon.id}}'>
+              <img class="card__bg" src="../../../assets/images/pokeball-background.png" alt="pokeball-card">
+              <div class="card__info">
+                  <h2 class="color-white">{{pokemon.name}}</h2>
+                  <span class="color-white {{'type-'}}{{pokemon | nombreType}}" *ngFor="let type of pokemon.types">{{type.type}}</span>
+              </div>
+              <div class="card__img">
+                  <img *ngIf="!classicMode" [src]="pokemon.image" [alt]="pokemon.name">
+                  <img *ngIf="classicMode" [src]="pokemon.image_animated" [alt]="pokemon.name">
+              </div>
+          </div>
+      </div>
+     </div>
+     
+  </div>
+
+  <div *ngIf="isSearching"  (scroll)="onScroll($event)">
+    <div *ngIf="searchPokemons.length; else notFound" class="row pokemon__list">
+    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4" *ngFor="let pokemon of searchPokemons" >
+        <div class="card {{'bg-'}}{{pokemon | nombreType}}" routerLink='/detail/{{pokemon.id}}'>
+            <img class="card__bg" src="../../../assets/images/pokeball-background.png" alt="pokeball-card">
+            <div class="card__info">
+                <h2 class="color-white">{{pokemon.name}}</h2>
+                <span class="color-white {{'type-'}}{{pokemon | nombreType}}" *ngFor="let type of pokemon.types">{{type.type}}</span>
+                
+            </div>
+            <div class="card__img ">
+                <img *ngIf="classicMode" [src]="pokemon.image" [alt]="pokemon.name">
+                <img *ngIf="!classicMode" [src]="pokemon.image_animated" [alt]="pokemon.name">
+            </div>
+        </div>
+    </div>
+    </div>
+   
+</div> 
+<ng-template #notFound>
+    <div class="row loading">
+        <h2>Error 404</h2>
+        <img class="notFound" src="../../../assets/images/pato.png" alt="notFound"/>
+       <span>Pokemon Not Found</span>
+    </div>
+</ng-template>
+
+
